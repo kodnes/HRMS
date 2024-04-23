@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Leave Form</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        button {
+            margin-bottom: 10px;
+            padding: 8px 12px; /* Adjust padding to make buttons smaller */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+            flex: 1; /* Equal width for both buttons */
+            margin-right: 5px; /* Add space between buttons */
+        }
+
+        button.cancel {
+            background-color: #ff0000; /* Red color */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Align buttons to opposite sides */
+        }
+        
+        #calendar {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Employee Leave Form</h2>
+        <form action="/Elsdata" method="post" onsubmit="return validateForm()">
+            <label for="employeeId">Employee ID:</label>
+            <input type="text" id="employeeId" name="Employee" th:value="${emps.emp_id}" readonly required>
+
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" onchange="calculateDaysTaken()" required>
+
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" onchange="calculateDaysTaken()" required>
+            
+            <label for="daysTaken">Days Taken:</label>
+            <input type="text" id="daysTaken" name="daysTaken" readonly><br/>
+            
+            <label for="leaveDates">Leave Dates:</label>
+            <input type="text" id="leaveDates" name="leaveDates" readonly><br/>
+            
+            <label for="leaveType">Leave Type:</label>
+            <input type="text" id="leaveType" name="leaveType" required>
+            
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" required>
+
+            <div class="button-container">
+                <button type="submit">Submit</button>
+                <button type="button" class="cancel" onclick="window.location.href='/'">Cancel</button>
+            </div>
+        </form>
+        <div id="calendar"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script>
+    <script>
+        function calculateDaysTaken() {
+            var startDate = new Date(document.getElementById("startDate").value);
+            var endDate = new Date(document.getElementById("endDate").value);
+
+            if (endDate < startDate) {
+                alert("End date cannot be before the start date!");
+                return false;
+            }
+
+            var timeDifference = endDate.getTime() - startDate.getTime();
+            var dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)); // Convert milliseconds to days
+            document.getElementById("daysTaken").value = dayDifference;
+            document.getElementById("leaveDates").value = generateLeaveDates(startDate, endDate);
+            updateCalendarEvents(startDate, endDate); // Call updateCalendarEvents function whenever dates change
+        }
+        
+        function generateLeaveDates(startDate, endDate) {
+            var leaveDates = [];
+            var currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                leaveDates.push(currentDate.toLocaleDateString());
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return leaveDates.join(", ");
+        }
+
+        function updateCalendarEvents(startDate, endDate) {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                datesSet: function (info) {
+                    var currentMonth = info.view.currentStart.getMonth() + 1;
+                    var currentYear = info.view.currentStart.getFullYear();
+                    var currentMonthYear = currentYear + '-' + (currentMonth < 10 ? '0' + currentMonth : currentMonth);
+                    var selectedMonthYear = startDate.getFullYear() + '-' + (startDate.getMonth() + 1 < 10 ? '0' + (startDate.getMonth() + 1) : (startDate.getMonth() + 1));
+                    
+                    if (currentMonthYear === selectedMonthYear) {
+                        var day = startDate.getDate() < 10 ? '0' + startDate.getDate() : startDate.getDate();
+                        var selectedDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1 < 10 ? '0' + (startDate.getMonth() + 1) : (startDate.getMonth() + 1)) + '-' + day;
+                        calendar.addEvent({
+                            title: 'Leave',
+                            start: selectedDate,
+                            display: 'background'
+                        });
+                    }
+                }
+            });
+            calendar.render();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth'
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>

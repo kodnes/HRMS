@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1e3c72; /* Dark blue */
+            background-image: linear-gradient(315deg, #1e3c72 0%, #2a5298 74%); /* Gradient from dark blue to light blue */
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: darkblue; /* White */
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        p {
+            color: black; /* Light gray */
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        a {
+            text-decoration: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049; /* Dark green on hover */
+        }
+        #logoutbutton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f44336; /* Red */
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #logoutbutton:hover {
+            background-color: #c82333; /* Dark red on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Our Employee & Organization Management System</h1>
+        <p>Efficiently manage your company's workforce and organization details with our user-friendly system.</p>
+        <a href="empdisplay"><button>Employees Details</button></a>
+        <a href="orgform"><button>Add Organization</button></a>
+        <a href="auth"><button>Add Authentication</button></a>
+        <a href="empleav"><button>Employee-LeaveList</button></a>
+        <form action="ind">
+            <input type="submit" id="logoutbutton" value="Logout" onclick="logoutpopup()">
+        </form>
+    </div>
+    
+   <script type="text/javascript">
+
+    	function logoutpopup(){
+    	alert("log out successfull");
+    	}
+    	
+    	
+    </script>
+</body>
+</html>

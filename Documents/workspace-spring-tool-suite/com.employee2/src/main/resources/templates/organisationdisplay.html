@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Organization Display</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+        .add-user-button {
+            margin-bottom: 20px;
+        }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Details Of Organizations</h1>
+     <div class="logout-button">
+        <a class="btn btn-secondary" href="/logout" onclick="showLogoutAlert()">Logout</a>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>org_id</th>
+                <th>name</th>
+                <th>location</th>
+                <th>description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="org : ${orgs}">
+                <td th:text="${org.orgId}"></td>
+                <td th:text="${org.name}"></td>
+                <td th:text="${org.description}"></td>
+                <td th:text="${org.location}"></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/organization/edit/{orgId}(orgId=${org.orgId})}">Edit</a>
+                    <a class="btn btn-danger" th:href="@{/organization/delete/{orgId}(orgId=${org.orgId})}" onclick="return confirm('Are you sure you want to delete this organization?')">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        function showLogoutAlert() {
+            alert("Logout successful!");
+        }
+    </script>
+</body>
+</html>

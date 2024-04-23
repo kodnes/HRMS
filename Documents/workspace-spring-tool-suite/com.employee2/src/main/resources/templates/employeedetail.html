@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add custom styles here */
+        /* Optional: Customize the appearance of the navbar */
+        .navbar-custom {
+            background-color: #007bff; /* Change the background color */
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-text {
+            color: #ffffff; /* Change the text color */
+        }
+        .edit-button, .logout-button, .manage-leaves-button, .retrieve-days-button {
+            padding: 8px 16px; /* Adjust padding as needed */
+            border: none;
+            border-radius: 4px;
+            text-decoration: none; /* Remove underline from the link */
+            display: inline-block; /* Display buttons in a line */
+            margin-right: 10px; /* Add space between buttons */
+            margin:5px;
+        }
+        .logout-button {
+            background-color: red;
+            color: white; /* Text color */
+            padding:2px;
+        }
+        .edit-button {
+            background-color: yellow;
+            color: black; /* Text color */
+        }
+        .manage-leaves-button {
+            background-color: #dc3545; /* Bootstrap's danger color */
+            color: white; /* Text color */
+        }
+        .retrieve-days-button {
+            background-color: #007bff; /* Bootstrap's primary color */
+            color: white; /* Text color */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="#">Employee Profile</a>
+            <!-- Buttons -->
+            <div>
+                <h2>Leave Information</h2>
+                <p>Days Taken: <span th:text="${employeeLeave != null ? employeeLeave.daysTaken : 'N/A'}"></span></p>
+            </div>
+            <div class="ml-auto">
+                <div class="mr-2">
+                    <a class="logout-button" href="logoutbutton">Logout</a>
+                </div>
+                <div>
+                    <a class="edit-button" th:href="@{/employee1/edit/{emp_id}(emp_id=${employee.emp_id})}">Edit</a>
+                    <a class="btn btn-danger" th:href="@{/employee/leave/{emp_id}(emp_id=${employee.emp_id})}">Manage Leaves</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Employee Details</h2>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td th:text="${employee.name}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Email</th>
+                    <td th:text="${employee.email}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Phone</th>
+                    <td th:text="${employee.phone}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Location</th>
+                    <td th:text="${employee.location}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Designation</th>
+                    <td th:text="${employee.designation}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

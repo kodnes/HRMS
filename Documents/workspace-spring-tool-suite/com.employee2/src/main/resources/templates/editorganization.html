@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Organization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+        }
+        
+        form {
+            width: 100%;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        button[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit Organization</h2>
+        <form th:action="@{/organization/update/{id}(id=${organization.orgId})}" method="post" onsubmit="return validateForm()">
+            <input type="hidden" id="orgId" name="orgId" th:value="${organization.orgId}">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" th:value="${organization.name}" required>
+            <br/>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required th:text="${organization.description}"></textarea>
+            <br/>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" th:value="${organization.location}" required>
+            <br/>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var description = document.getElementById("description").value;
+            var location = document.getElementById("location").value;
+
+            if (name == "" || description == "" || location == "") {
+                alert("Please fill out all fields.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

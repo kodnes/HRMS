@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Employee</title>
+</head>
+<body>
+    <h2>Update Employee</h2>
+    <form action="/employee/{id}" method="put" th:object="${employee}">
+        <input type="hidden" th:field="*{emp_id}"/> <!-- Hidden field for employee ID -->
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" required/><br/>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required/><br/>
+        <label>Phone:</label>
+        <input type="text" th:field="*{phone}" required/><br/>
+        <!-- Add more fields as required -->
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>
