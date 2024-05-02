@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Organization Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+        }
+        
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button[type="submit"],
+        button[type="button"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .submit-button {
+            background-color: green;
+            color: #333;
+        }
+        
+        .cancel-button {
+            background-color: red;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align:center">Add Organization</h2>
+         <div th:if="${errorMessage}" class="error-message">
+                <p th:text="${errorMessage}" class="error-text"></p>
+            </div>
+        <form action="/orgdata" method="post" th:object="${organization}" onsubmit="return validateForm()">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br/>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+            <br/>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+            <br/>
+
+            <div class="button-group">
+                <button type="submit" class="submit-button">Submit</button>
+                <a href="http://localhost:8080/validate">
+    <button type="button" class="cancel-button">Cancel</button>
+</a>
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var description = document.getElementById("description").value;
+            var location = document.getElementById("location").value;
+
+            if (name == "" || description == "" || location == "") {
+                alert("Please fill out all fields.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
