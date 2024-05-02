@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Leave Form with Calendar</title>
+    <style>
+        /* CSS styles for Employee Leave Form and Calendar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-side {
+            width: 48%;
+        }
+
+        .right-side {
+            width: 48%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        button {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+            flex: 1;
+            margin-right: 5px;
+        }
+
+        button.cancel {
+            background-color: #ff0000;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .calendar {
+            border-radius: 4px;
+            overflow: hidden;
+            height: 450px;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 20px;
+        }
+
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .calendar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .calendar ul li {
+            float: left;
+            width: 55px;
+            height: 55px;
+            line-height: 55px;
+            text-align: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .calendar ul li:hover {
+            background-color: #eee;
+        }
+
+        .today {
+            background-color: #4caf50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left side (Employee Leave Form) -->
+        <div class="left-side">
+            <h2>Employee Leave Form</h2>
+            <form action="/Elsdata" method="post" onsubmit="return validateForm()">
+                <label for="employeeId">Employee ID:</label>
+                <input type="text" id="employeeId" name="Employee" th:value="${empId}" readonly required>
+
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" onchange="calculateDaysTaken()" required>
+
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" onchange="calculateDaysTaken()" required>
+
+                <label for="daysTaken">Days Taken:</label>
+                <input type="text" id="daysTaken" name="daysTaken" readonly><br/>
+
+                <label for="leaveType">Leave Type:</label>
+                <input type="text" id="leaveType" name="leaveType" required>
+
+                <label for="status">Status:</label>
+                <input type="text" id="status" name="status" required>
+
+                <div class="button-container">
+                    <button type="submit" onclick="submitform()">Submit</button>
+                    <button type="button" class="cancel" onclick="cancelForm()">Cancel</button>
+                </div>
+            </form>
+            <script>
+            function submitform(){
+           alert("successfully applied leave");
+        }
+            </script>
+        </div>
+
+        <!-- Right side (Employee Leave Calendar) -->
+        <div class="right-side">
+            <div class="calendar">
+                <h2 class="calendar-header" id="calendarHeader">Employee Leave Calendar</h2>
+                <ul class="days" id="calendarDays">
+                    <!-- Calendar days will be dynamically generated here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarDays = document.getElementById('calendarDays');
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+            var calendarHeader = document.getElementById('calendarHeader');
+
+            // Dynamically generate calendar days
+            var today = new Date();
+            var currentDay = today.getDate(); // Get current day of the month
+
+            for (var i = 1; i <= 31; i++) {
+                var dayElement = document.createElement('li');
+                dayElement.textContent = i;
+                dayElement.setAttribute('data-value', i);
+
+                // Highlight today's date
+                if (i === currentDay) {
+                    dayElement.classList.add('today');
+                }
+
+                dayElement.addEventListener('click', function() {
+                    var dateValue = this.getAttribute('data-value');
+                    var selectedDate = new Date(); // Current date by default
+
+                    // Set the day of the selected month
+                    selectedDate.setDate(dateValue);
+
+                    // Check which date input is empty or should be cleared
+                    if (!startDateInput.valueAsDate) {
+                        // Set selected date as the start date
+                        startDateInput.valueAsDate = selectedDate;
+                    } else if (!endDateInput.valueAsDate) {
+                        // Set selected date as the end date
+                        endDateInput.valueAsDate = selectedDate;
+                    } else {
+                        // Clear both dates and set selected date as the start date
+                        startDateInput.valueAsDate = selectedDate;
+                        endDateInput.valueAsDate = null;
+                    }
+
+                    // Update days taken and validate date selection
+                    calculateDaysTaken();
+                });
+
+                calendarDays.appendChild(dayElement);
+            }
+
+            // Display current month and year in calendar header
+            var options = { month: 'long', year: 'numeric' };
+            calendarHeader.textContent = today.toLocaleDateString('en-US', options);
+
+            // Initialize start date to today
+            startDateInput.min = formatDate(today);
+
+            // Update the minimum end date based on the selected start date
+            startDateInput.addEventListener('change', function() {
+                endDateInput.min = startDateInput.value;
+                calculateDaysTaken();
+            });
+
+            // Update days taken and validate date selection on end date change
+            endDateInput.addEventListener('change', function() {
+                calculateDaysTaken();
+            });
+
+            function formatDate(date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString().padStart(2, '0');
+                var day = date.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            function calculateDaysTaken() {
+                var startDate = startDateInput.valueAsDate;
+                var endDate = endDateInput.valueAsDate;
+
+                if (!endDate || endDate < startDate) {
+                    // Clear days taken and display error message
+                    document.getElementById('daysTaken').value = '';
+                    return;
+                }
+
+                var timeDifference = endDate.getTime() - startDate.getTime();
+                var dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+                if (dayDifference === 0) {
+                    // Show error message when start date and end date are the same
+                    alert("Start date and end date cannot be the same!");
+                    endDateInput.value = ''; // Clear end date
+                    document.getElementById('daysTaken').value = '';
+                    return;
+                }
+                if (dayDifference > 20) {
+                    alert("Maximum leave days exceeded (20 days)!");
+                    return;
+                }
+
+                // Update days taken field
+                document.getElementById('daysTaken').value = dayDifference;
+            }
+            
+            function cancelForm() {
+    // Redirect to the cancel URL
+    window.location.href = 'http://localhost:8080/validate'; // Enclose URL within quotes
+}
+        });
+        
+    </script>
+</body>
+</html>

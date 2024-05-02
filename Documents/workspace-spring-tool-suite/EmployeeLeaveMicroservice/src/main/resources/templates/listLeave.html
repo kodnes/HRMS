@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Leave List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Added styles for logout link */
+        .logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-decoration: none;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logout link -->
+    <a class="logout-link" href="http://localhost:8080/validate">Logout</a>
+
+    <h1>Employee Leave List</h1>
+        <p>Maximum Days Allowed: <span th:text=40></span></p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Leave ID</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Leave Type</th>
+                <th>Status</th>
+                <th>Days Taken</th>
+                <!-- Add more headers as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over the list of employee leave data -->
+            <tr th:each="empLeave : ${emp}">
+                <td th:text="${empLeave.leaveId}"></td>
+                <td th:text="${empLeave.startDate}"></td>
+                <td th:text="${empLeave.endDate}"></td>
+                <td th:text="${empLeave.leaveType}"></td>
+                <td th:text="${empLeave.status}"></td>
+                <td th:text="${empLeave.daysTaken}"></td>
+                <!-- Add more columns as needed -->
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
